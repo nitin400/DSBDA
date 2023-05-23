@@ -1,0 +1,32 @@
+hdoop@Vilas:~$ start-all.sh
+hdoop@Vilas:~$ ls -lrt
+hdoop@Vilas:~/apache-hive-3.1.2-bin/bin$ hive
+hive> show  databases;
+hive> create database db1;
+hive> use db1;
+hive> create table flight (fno int, year int, dest varchar(10),delay float);
+hive> alter table flight rename to air_flight;
+hive> alter table air_flight add columns (source varchar(10));
+hive> create table flight (fno int, year int, dest varchar(10),delay float);
+hive> insert into flight values (123, 2009, "Mumbai", 30.0);
+hive> insert into flight values (342, 2008, "Nagpur", 13.0);
+hive> insert into flight values (232, 2008, "Pune", 0.0);
+hive> insert into flight values (103, 2009, "Nashik",10.0);
+hive> select * from flight;
+hive> create table nflight (fno int, year int,source varchar(10))
+    > row format delimited
+    > fields terminated by ','
+    > lines terminated by '\n'
+    > stored as textfile;
+
+hive> select * from nflight;
+hive> insert into nflight values (121, 2010, "Mumbai");
+hive> insert into nflight values (133, 2003, "Pen");
+hive> insert into nflight values (191, 2003, "Delhi");
+hive> insert into nflight values (103, 2008, "Pune");
+hive> select * from nflight;
+hive> select a.fno, a.year, a.dest, a.delay, b.source
+    > from flight a join nflight b
+    > on (a.fno = b.fno) ;
+hive> show tables;
+hive> select avg(delay) from flight where year = 2008;

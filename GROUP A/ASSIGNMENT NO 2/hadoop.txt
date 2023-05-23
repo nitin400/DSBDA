@@ -1,0 +1,419 @@
+nitin@nitin-pc:~$ su - hduser
+Password: 
+hduser@nitin-pc:~$ sudo mkdir analyazelogs
+[sudo] password for hduser: 
+hduser@nitin-pc:~$ sudo chmod -R 777 analyazelogs/  
+hduser@nitin-pc:~$ ls -al
+total 48
+drwxr-xr-x 7 hduser hadoop 4096 May 20 19:15 .
+drwxr-xr-x 4 root   root   4096 May 19 08:37 ..
+drwxrwxrwx 2 root   root   4096 May 20 19:15 analyazelogs
+-rw------- 1 hduser hadoop    5 May 19 08:47 .bash_history
+-rw-r--r-- 1 hduser hadoop  220 May 19 08:37 .bash_logout
+-rw-r--r-- 1 hduser hadoop 4193 May 19 22:43 .bashrc
+drwx------ 4 hduser hadoop 4096 May 19 08:46 .cache
+drwxr-xr-x 4 hduser hadoop 4096 May 19 08:46 .config
+drwxr-xr-x 3 hduser hadoop 4096 May 19 08:46 .local
+-rw-r--r-- 1 hduser hadoop  807 May 19 08:37 .profile
+drwx------ 2 hduser hadoop 4096 May 19 08:46 .ssh
+-rw-r--r-- 1 hduser hadoop    0 May 19 22:22 .sudo_as_admin_successful
+hduser@nitin-pc:~$ pwd
+/home/hduser
+hduser@nitin-pc:~$ ls
+analyazelogs
+hduser@nitin-pc:~$ sudo chown -R hduser analyazelogs/
+hduser@nitin-pc:~$ cd analyazelogs/
+hduser@nitin-pc:~/analyazelogs$ ls
+hduser@nitin-pc:~/analyazelogs$ cd ..
+hduser@nitin-pc:~$ ls
+analyazelogs
+hduser@nitin-pc:~$ pwd
+/home/hduser
+hduser@nitin-pc:~$ sudo cp /home/nitin/Desktop/Downloads/* ~/analyazelogs/
+cp: cannot stat '/home/nitin/Desktop/Downloads/*': No such file or directory
+hduser@nitin-pc:~$ sudo cp /home/nitin/Desktop/count_logged_users/* ~/analyazelogs/
+hduser@nitin-pc:~$ ls
+analyazelogs
+hduser@nitin-pc:~$ cd analyazelogs/
+hduser@nitin-pc:~/analyazelogs$ ls
+access_log_short.csv  hadoop-mapreduce-example-file.txt  SalesCountryReducer.java
+access_log_short.txt  SalesCountryDriver.java            SalesMapper.java
+hduser@nitin-pc:~/analyazelogs$ ls -ltr
+total 312
+-rw-r--r-- 1 root  root     749 May 20 19:29 SalesCountryReducer.java
+-rw-r--r-- 1 root  root    1367 May 20 19:29 SalesCountryDriver.java
+-rw-r--r-- 1 root  root     391 May 20 19:29 hadoop-mapreduce-example-file.txt
+-rw-r--r-- 1 root  root  143084 May 20 19:29 access_log_short.txt
+-rw-r--r-- 1 root  root     659 May 20 19:29 SalesMapper.java
+-rw-rw-r-- 1 nitin nitin 158551 May 20 19:38 access_log_short.csv
+hduser@nitin-pc:~/analyazelogs$ sudo chmod +r *.*
+hduser@nitin-pc:~/analyazelogs$ export CLASSPATH="$HADOOP_HOME/share/hadoop/mapreduce/hadoop-mapreduce-client-core-2.9.0.jar:$HADOOP_HOME/share/hadoop/mapreduce/hadoop-mapreduce-client-common-2.9.0.jar:$HADOOP_HOME/share/hadoop/common/hadoop-common-2.9.0.jar:~/analyzelogs/SalesCountry/*:$HADOOP_HOME/lib/*"
+hduser@nitin-pc:~/analyazelogs$ javac -d . SalesMapper.java SalesCountryReducer.java SalesCountryDriver.java 
+hduser@nitin-pc:~/analyazelogs$ ls
+access_log_short.csv  hadoop-mapreduce-example-file.txt  SalesCountryDriver.java   SalesMapper.java
+access_log_short.txt  SalesCountry                       SalesCountryReducer.java
+hduser@nitin-pc:~/analyazelogs$ cd SalesCountry/
+hduser@nitin-pc:~/analyazelogs/SalesCountry$ ls
+SalesCountryDriver.class  SalesCountryReducer.class  SalesMapper.class
+hduser@nitin-pc:~/analyazelogs/SalesCountry$ cd ..
+hduser@nitin-pc:~/analyazelogs$ sudo gedit Manifest.txt
+Unable to init server: Could not connect: Connection refused
+
+(gedit:4704): Gtk-WARNING **: 19:44:52.836: cannot open display: 
+hduser@nitin-pc:~/analyazelogs$ sudo nano  Manifest.txt
+hduser@nitin-pc:~/analyazelogs$ jar -cfm analyzelogs.jar Manifest.txt SalesCountry/*.txt
+SalesCountry/*.txt : no such file or directory
+hduser@nitin-pc:~/analyazelogs$ ls
+access_log_short.csv  hadoop-mapreduce-example-file.txt  SalesCountryDriver.java
+access_log_short.txt  Manifest.txt                       SalesCountryReducer.java
+analyzelogs.jar       SalesCountry                       SalesMapper.java
+hduser@nitin-pc:~/analyazelogs$ jar -cfm analyzelogs.jar Manifest.txt SalesCountry/*.class
+hduser@nitin-pc:~/analyazelogs$ ls
+access_log_short.csv  hadoop-mapreduce-example-file.txt  SalesCountryDriver.java
+access_log_short.txt  Manifest.txt                       SalesCountryReducer.java
+analyzelogs.jar       SalesCountry                       SalesMapper.java
+hduser@nitin-pc:~/analyazelogs$ cd
+hduser@nitin-pc:~$ sudo start-dfs.sh
+sudo: start-dfs.sh: command not found
+hduser@nitin-pc:~$ start-dfs.sh
+23/05/20 19:49:04 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Starting namenodes on [localhost]
+localhost: starting namenode, logging to /usr/local/hadoop/logs/hadoop-hduser-namenode-nitin-pc.out
+localhost: starting datanode, logging to /usr/local/hadoop/logs/hadoop-hduser-datanode-nitin-pc.out
+Starting secondary namenodes [0.0.0.0]
+0.0.0.0: starting secondarynamenode, logging to /usr/local/hadoop/logs/hadoop-hduser-secondarynamenode-nitin-pc.out
+23/05/20 19:49:33 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+hduser@nitin-pc:~$ start-yarn.sh
+starting yarn daemons
+starting resourcemanager, logging to /usr/local/hadoop/logs/yarn-hduser-resourcemanager-nitin-pc.out
+localhost: starting nodemanager, logging to /usr/local/hadoop/logs/yarn-hduser-nodemanager-nitin-pc.out
+hduser@nitin-pc:~$ jps
+5008 NameNode
+5717 NodeManager
+5880 Jps
+5387 SecondaryNameNode
+5579 ResourceManager
+5165 DataNode
+hduser@nitin-pc:~$ cd analyazelogs/
+hduser@nitin-pc:~/analyazelogs$ sudo mkdir ~/input2000
+hduser@nitin-pc:~/analyazelogs$ ls
+access_log_short.csv  hadoop-mapreduce-example-file.txt  SalesCountryDriver.java
+access_log_short.txt  Manifest.txt                       SalesCountryReducer.java
+analyzelogs.jar       SalesCountry                       SalesMapper.java
+hduser@nitin-pc:~/analyazelogs$ sudo cp access_log_short.csv ~/input2000/
+hduser@nitin-pc:~/analyazelogs$ $HADOOP_HOME/bin/hdfs dfs -put ~/input2000/
+23/05/20 19:52:05 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+put: `.': No such file or directory: `hdfs://localhost:9000/user/hduser'
+hduser@nitin-pc:~/analyazelogs$ $HADOOP_HOME/bin/hdfs dfs -put ~/input2000 /
+23/05/20 19:52:44 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+hduser@nitin-pc:~/analyazelogs$ $HADOOP_HOME/bin/hadoop jar analyzelogs.jar /input2000 /output2000
+23/05/20 19:53:45 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+23/05/20 19:53:46 INFO client.RMProxy: Connecting to ResourceManager at /0.0.0.0:8032
+23/05/20 19:53:47 INFO client.RMProxy: Connecting to ResourceManager at /0.0.0.0:8032
+23/05/20 19:53:47 WARN mapreduce.JobResourceUploader: Hadoop command-line option parsing not performed. Implement the Tool interface and execute your application with ToolRunner to remedy this.
+23/05/20 19:53:49 INFO mapred.FileInputFormat: Total input files to process : 1
+23/05/20 19:53:50 INFO mapreduce.JobSubmitter: number of splits:2
+23/05/20 19:53:51 INFO Configuration.deprecation: yarn.resourcemanager.system-metrics-publisher.enabled is deprecated. Instead, use yarn.system-metrics-publisher.enabled
+23/05/20 19:53:52 INFO mapreduce.JobSubmitter: Submitting tokens for job: job_1684592388603_0001
+23/05/20 19:53:54 INFO impl.YarnClientImpl: Submitted application application_1684592388603_0001
+23/05/20 19:53:55 INFO mapreduce.Job: The url to track the job: http://nitin-pc:8088/proxy/application_1684592388603_0001/
+23/05/20 19:53:55 INFO mapreduce.Job: Running job: job_1684592388603_0001
+23/05/20 19:54:14 INFO mapreduce.Job: Job job_1684592388603_0001 running in uber mode : false
+23/05/20 19:54:14 INFO mapreduce.Job:  map 0% reduce 0%
+23/05/20 19:54:30 INFO mapreduce.Job:  map 100% reduce 0%
+23/05/20 19:54:42 INFO mapreduce.Job:  map 100% reduce 100%
+23/05/20 19:54:47 INFO mapreduce.Job: Job job_1684592388603_0001 completed successfully
+23/05/20 19:54:47 INFO mapreduce.Job: Counters: 49
+	File System Counters
+		FILE: Number of bytes read=26771
+		FILE: Number of bytes written=659301
+		FILE: Number of read operations=0
+		FILE: Number of large read operations=0
+		FILE: Number of write operations=0
+		HDFS: Number of bytes read=162855
+		HDFS: Number of bytes written=3838
+		HDFS: Number of read operations=9
+		HDFS: Number of large read operations=0
+		HDFS: Number of write operations=2
+	Job Counters 
+		Launched map tasks=2
+		Launched reduce tasks=1
+		Data-local map tasks=2
+		Total time spent by all maps in occupied slots (ms)=27736
+		Total time spent by all reduces in occupied slots (ms)=8510
+		Total time spent by all map tasks (ms)=27736
+		Total time spent by all reduce tasks (ms)=8510
+		Total vcore-milliseconds taken by all map tasks=27736
+		Total vcore-milliseconds taken by all reduce tasks=8510
+		Total megabyte-milliseconds taken by all map tasks=28401664
+		Total megabyte-milliseconds taken by all reduce tasks=8714240
+	Map-Reduce Framework
+		Map input records=1294
+		Map output records=1294
+		Map output bytes=24177
+		Map output materialized bytes=26777
+		Input split bytes=208
+		Combine input records=0
+		Combine output records=0
+		Reduce input groups=227
+		Reduce shuffle bytes=26777
+		Reduce input records=1294
+		Reduce output records=227
+		Spilled Records=2588
+		Shuffled Maps =2
+		Failed Shuffles=0
+		Merged Map outputs=2
+		GC time elapsed (ms)=1361
+		CPU time spent (ms)=7860
+		Physical memory (bytes) snapshot=782577664
+		Virtual memory (bytes) snapshot=5685047296
+		Total committed heap usage (bytes)=501219328
+	Shuffle Errors
+		BAD_ID=0
+		CONNECTION=0
+		IO_ERROR=0
+		WRONG_LENGTH=0
+		WRONG_MAP=0
+		WRONG_REDUCE=0
+	File Input Format Counters 
+		Bytes Read=162647
+	File Output Format Counters 
+		Bytes Written=3838
+hduser@nitin-pc:~/analyazelogs$ $HADOOP_H
+$HADOOP_HDFS_HOME  $HADOOP_HOME       
+hduser@nitin-pc:~/analyazelogs$ $HADOOP_HOME/bin/hdfs dfs -cat /output2000/part-8000
+23/05/20 19:56:08 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+cat: `/output2000/part-8000': No such file or directory
+hduser@nitin-pc:~/analyazelogs$ $HADOOP_HOME/bin/hdfs dfs -cat /output2000/part-0000
+23/05/20 19:56:25 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+cat: `/output2000/part-0000': No such file or directory
+hduser@nitin-pc:~/analyazelogs$ $HADOOP_HOME/bin/hdfs dfs -cat /output2000/part-00000
+23/05/20 19:56:32 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+10.1.1.236 	7
+10.1.181.142 	14
+10.1.232.31 	5
+10.10.55.142 	14
+10.102.101.66 	1
+10.103.184.104 	1
+10.103.190.81 	53
+10.103.63.29 	1
+10.104.73.51 	1
+10.105.160.183 	1
+10.108.91.151 	1
+10.109.21.76 	1
+10.11.131.40 	1
+10.111.71.20 	8
+10.112.227.184 	6
+10.114.74.30 	1
+10.115.118.78 	1
+10.117.224.230 	1
+10.117.76.22 	12
+10.118.19.97 	1
+10.118.250.30 	7
+10.119.117.132 	23
+10.119.33.245 	1
+10.119.74.120 	1
+10.12.113.198 	2
+10.12.219.30 	1
+10.120.165.113 	1
+10.120.207.127 	4
+10.123.124.47 	1
+10.123.35.235 	1
+10.124.148.99 	1
+10.124.155.234 	1
+10.126.161.13 	7
+10.127.162.239 	1
+10.128.11.75 	10
+10.13.42.232 	1
+10.130.195.163 	8
+10.130.70.80 	1
+10.131.163.73 	1
+10.131.209.116 	5
+10.132.19.125 	2
+10.133.222.184 	12
+10.134.110.196 	13
+10.134.242.87 	1
+10.136.84.60 	5
+10.14.2.86 	8
+10.14.4.151 	2
+10.140.139.116 	1
+10.140.141.1 	9
+10.140.67.116 	1
+10.141.221.57 	5
+10.142.203.173 	7
+10.143.126.177 	32
+10.144.147.8 	1
+10.15.208.56 	1
+10.15.23.44 	13
+10.150.212.239 	14
+10.150.227.16 	1
+10.150.24.40 	13
+10.152.195.138 	8
+10.153.23.63 	2
+10.153.239.5 	25
+10.155.95.124 	9
+10.156.152.9 	1
+10.157.176.158 	1
+10.164.130.155 	1
+10.164.49.105 	8
+10.164.95.122 	10
+10.165.106.173 	14
+10.167.1.145 	19
+10.169.158.88 	1
+10.170.178.53 	1
+10.171.104.4 	1
+10.172.169.53 	18
+10.174.246.84 	3
+10.175.149.65 	1
+10.175.204.125 	15
+10.177.216.164 	6
+10.179.107.170 	2
+10.181.38.207 	13
+10.181.87.221 	1
+10.185.152.140 	1
+10.186.56.126 	16
+10.186.56.183 	1
+10.187.129.140 	6
+10.187.177.220 	1
+10.187.212.83 	1
+10.187.28.68 	1
+10.19.226.186 	2
+10.190.174.142 	10
+10.190.41.42 	5
+10.191.172.11 	1
+10.193.116.91 	1
+10.194.174.4 	7
+10.198.138.192 	1
+10.199.103.248 	2
+10.199.189.15 	1
+10.2.202.135 	1
+10.200.184.212 	1
+10.200.237.222 	1
+10.200.9.128 	2
+10.203.194.139 	10
+10.205.72.238 	2
+10.206.108.96 	2
+10.206.175.236 	1
+10.206.73.206 	7
+10.207.190.45 	17
+10.208.38.46 	1
+10.208.49.216 	4
+10.209.18.39 	9
+10.209.54.187 	3
+10.211.47.159 	10
+10.212.122.173 	1
+10.213.181.38 	7
+10.214.35.48 	1
+10.215.222.114 	1
+10.216.113.172 	48
+10.216.134.214 	1
+10.216.227.195 	16
+10.217.151.145 	10
+10.217.32.16 	1
+10.218.16.176 	8
+10.22.108.103 	4
+10.220.112.1 	34
+10.221.40.89 	5
+10.221.62.23 	13
+10.222.246.34 	1
+10.223.157.186 	10
+10.225.137.152 	1
+10.225.234.46 	1
+10.226.130.133 	1
+10.229.60.23 	1
+10.230.191.135 	6
+10.231.55.231 	1
+10.234.15.156 	1
+10.236.231.63 	1
+10.238.230.235 	1
+10.239.100.52 	1
+10.239.52.68 	4
+10.24.150.4 	5
+10.24.67.131 	13
+10.240.144.183 	15
+10.240.170.50 	1
+10.241.107.75 	1
+10.241.9.187 	1
+10.243.51.109 	5
+10.244.166.195 	5
+10.245.208.15 	20
+10.246.151.162 	3
+10.247.111.104 	9
+10.247.175.65 	1
+10.247.229.13 	1
+10.248.24.219 	1
+10.248.36.117 	3
+10.249.130.132 	3
+10.25.132.238 	2
+10.25.44.247 	6
+10.250.166.232 	1
+10.27.134.23 	1
+10.30.164.32 	1
+10.30.47.170 	8
+10.31.225.14 	7
+10.32.138.48 	11
+10.32.247.175 	4
+10.32.55.216 	12
+10.33.181.9 	8
+10.34.233.107 	1
+10.36.200.176 	1
+10.39.45.70 	2
+10.39.94.109 	4
+10.4.59.153 	1
+10.4.79.47 	15
+10.41.170.233 	9
+10.41.40.17 	1
+10.42.208.60 	1
+10.43.81.13 	1
+10.46.190.95 	10
+10.48.81.158 	5
+10.5.132.217 	1
+10.5.148.29 	1
+10.50.226.223 	9
+10.50.41.216 	3
+10.52.161.126 	1
+10.53.58.58 	1
+10.54.242.54 	10
+10.54.49.229 	1
+10.56.48.40 	16
+10.59.42.194 	11
+10.6.238.124 	6
+10.61.147.24 	1
+10.61.161.218 	1
+10.61.23.77 	8
+10.61.232.147 	3
+10.62.78.165 	2
+10.63.233.249 	7
+10.64.224.191 	13
+10.66.208.82 	2
+10.69.20.85 	26
+10.70.105.238 	1
+10.70.238.46 	6
+10.72.137.86 	6
+10.72.208.27 	1
+10.73.134.9 	4
+10.73.238.200 	1
+10.73.60.200 	1
+10.73.64.91 	1
+10.74.218.123 	1
+10.75.116.199 	1
+10.76.143.30 	1
+10.76.68.178 	16
+10.78.95.24 	8
+10.80.10.131 	10
+10.80.215.116 	17
+10.81.134.180 	1
+10.82.30.199 	63
+10.82.64.235 	1
+10.84.236.242 	1
+10.87.209.46 	1
+10.87.88.214 	1
+10.88.204.177 	1
+10.89.178.62 	1
+10.89.244.42 	1
+10.94.196.42 	1
+10.95.136.211 	4
+10.95.232.88 	1
+10.98.156.141 	1
+10.99.228.224 	1
+hduser@nitin-pc:~/analyazelogs$ stop-all.sh

@@ -1,0 +1,102 @@
+nitin@nitin-pc:~$ su - hduser
+Password: 
+hduser@nitin-pc:~$ sudo mkdir analyazelogs
+[sudo] password for hduser: 
+hduser@nitin-pc:~$ sudo chmod -R 777 analyazelogs/  
+hduser@nitin-pc:~$ ls -al
+
+hduser@nitin-pc:~$ pwd
+/home/hduser
+hduser@nitin-pc:~$ ls
+analyazelogs
+hduser@nitin-pc:~$ sudo chown -R hduser analyazelogs/
+hduser@nitin-pc:~$ cd analyazelogs/
+hduser@nitin-pc:~/analyazelogs$ ls
+hduser@nitin-pc:~/analyazelogs$ cd ..
+hduser@nitin-pc:~$ ls
+analyazelogs
+hduser@nitin-pc:~$ pwd
+/home/hduser
+hduser@nitin-pc:~$ sudo cp /home/nitin/Desktop/Downloads/* ~/analyazelogs/
+cp: cannot stat '/home/nitin/Desktop/Downloads/*': No such file or directory
+hduser@nitin-pc:~$ sudo cp /home/nitin/Desktop/count_logged_users/* ~/analyazelogs/
+hduser@nitin-pc:~$ ls
+analyazelogs
+hduser@nitin-pc:~$ cd analyazelogs/
+hduser@nitin-pc:~/analyazelogs$ ls
+access_log_short.csv  hadoop-mapreduce-example-file.txt  SalesCountryReducer.java
+access_log_short.txt  SalesCountryDriver.java            SalesMapper.java
+hduser@nitin-pc:~/analyazelogs$ ls -ltr
+
+hduser@nitin-pc:~/analyazelogs$ sudo chmod +r *.*
+hduser@nitin-pc:~/analyazelogs$ export CLASSPATH="$HADOOP_HOME/share/hadoop/mapreduce/hadoop-mapreduce-client-core-2.9.0.jar:$HADOOP_HOME/share/hadoop/mapreduce/hadoop-mapreduce-client-common-2.9.0.jar:$HADOOP_HOME/share/hadoop/common/hadoop-common-2.9.0.jar:~/analyzelogs/SalesCountry/*:$HADOOP_HOME/lib/*"
+hduser@nitin-pc:~/analyazelogs$ javac -d . SalesMapper.java SalesCountryReducer.java SalesCountryDriver.java 
+hduser@nitin-pc:~/analyazelogs$ ls
+access_log_short.csv  hadoop-mapreduce-example-file.txt  SalesCountryDriver.java   SalesMapper.java
+access_log_short.txt  SalesCountry                       SalesCountryReducer.java
+hduser@nitin-pc:~/analyazelogs$ cd SalesCountry/
+hduser@nitin-pc:~/analyazelogs/SalesCountry$ ls
+SalesCountryDriver.class  SalesCountryReducer.class  SalesMapper.class
+hduser@nitin-pc:~/analyazelogs/SalesCountry$ cd ..
+hduser@nitin-pc:~/analyazelogs$ sudo gedit Manifest.txt
+Unable to init server: Could not connect: Connection refused
+
+(gedit:4704): Gtk-WARNING **: 19:44:52.836: cannot open display: 
+hduser@nitin-pc:~/analyazelogs$ sudo nano  Manifest.txt
+hduser@nitin-pc:~/analyazelogs$ jar -cfm analyzelogs.jar Manifest.txt SalesCountry/*.txt
+SalesCountry/*.txt : no such file or directory
+hduser@nitin-pc:~/analyazelogs$ ls
+access_log_short.csv  hadoop-mapreduce-example-file.txt  SalesCountryDriver.java
+access_log_short.txt  Manifest.txt                       SalesCountryReducer.java
+analyzelogs.jar       SalesCountry                       SalesMapper.java
+hduser@nitin-pc:~/analyazelogs$ jar -cfm analyzelogs.jar Manifest.txt SalesCountry/*.class
+hduser@nitin-pc:~/analyazelogs$ ls
+access_log_short.csv  hadoop-mapreduce-example-file.txt  SalesCountryDriver.java
+access_log_short.txt  Manifest.txt                       SalesCountryReducer.java
+analyzelogs.jar       SalesCountry                       SalesMapper.java
+hduser@nitin-pc:~/analyazelogs$ cd
+hduser@nitin-pc:~$ sudo start-dfs.sh
+sudo: start-dfs.sh: command not found
+hduser@nitin-pc:~$ start-dfs.sh
+23/05/20 19:49:04 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Starting namenodes on [localhost]
+localhost: starting namenode, logging to /usr/local/hadoop/logs/hadoop-hduser-namenode-nitin-pc.out
+localhost: starting datanode, logging to /usr/local/hadoop/logs/hadoop-hduser-datanode-nitin-pc.out
+Starting secondary namenodes [0.0.0.0]
+0.0.0.0: starting secondarynamenode, logging to /usr/local/hadoop/logs/hadoop-hduser-secondarynamenode-nitin-pc.out
+23/05/20 19:49:33 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+hduser@nitin-pc:~$ start-yarn.sh
+starting yarn daemons
+starting resourcemanager, logging to /usr/local/hadoop/logs/yarn-hduser-resourcemanager-nitin-pc.out
+localhost: starting nodemanager, logging to /usr/local/hadoop/logs/yarn-hduser-nodemanager-nitin-pc.out
+hduser@nitin-pc:~$ jps
+5008 NameNode
+5717 NodeManager
+5880 Jps
+5387 SecondaryNameNode
+5579 ResourceManager
+5165 DataNode
+hduser@nitin-pc:~$ cd analyazelogs/
+hduser@nitin-pc:~/analyazelogs$ sudo mkdir ~/input2000
+hduser@nitin-pc:~/analyazelogs$ ls
+access_log_short.csv  hadoop-mapreduce-example-file.txt  SalesCountryDriver.java
+access_log_short.txt  Manifest.txt                       SalesCountryReducer.java
+analyzelogs.jar       SalesCountry                       SalesMapper.java
+hduser@nitin-pc:~/analyazelogs$ sudo cp access_log_short.csv ~/input2000/
+hduser@nitin-pc:~/analyazelogs$ $HADOOP_HOME/bin/hdfs dfs -put ~/input2000/
+23/05/20 19:52:05 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+put: `.': No such file or directory: `hdfs://localhost:9000/user/hduser'
+hduser@nitin-pc:~/analyazelogs$ $HADOOP_HOME/bin/hdfs dfs -put ~/input2000 /
+23/05/20 19:52:44 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+hduser@nitin-pc:~/analyazelogs$ $HADOOP_HOME/bin/hadoop jar analyzelogs.jar /input2000 /output2000
+
+hduser@nitin-pc:~/analyazelogs$ $HADOOP_H
+$HADOOP_HDFS_HOME  $HADOOP_HOME       
+hduser@nitin-pc:~/analyazelogs$ $HADOOP_HOME/bin/hdfs dfs -cat /output2000/part-8000
+23/05/20 19:56:08 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+cat: `/output2000/part-8000': No such file or directory
+hduser@nitin-pc:~/analyazelogs$ $HADOOP_HOME/bin/hdfs dfs -cat /output2000/part-0000
+23/05/20 19:56:25 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+cat: `/output2000/part-0000': No such file or directory
+hduser@nitin-pc:~/analyazelogs$ $HADOOP_HOME/bin/hdfs dfs -cat /output2000/part-00000
+hduser@nitin-pc:~/analyazelogs$ stop-all.sh
